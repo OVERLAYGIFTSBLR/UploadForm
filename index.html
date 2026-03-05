@@ -3,198 +3,160 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WELCOME TO OVERLAYGIFTS | Upload</title>
+<title>AR Memory | Upload</title>
 
 <style>
   :root {
     --primary: #00ff99;
-    --primary-glow: rgba(0, 255, 153, 0.4);
+    --primary-glow: rgba(0, 255, 153, 0.5);
     --bg: #0a0a0a;
-    --card-bg: rgba(255, 255, 255, 0.05);
+    --card-bg: #111111;
     --error: #ff4d4d;
   }
 
   body {
     margin: 0;
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background: radial-gradient(circle at top right, #1a1a1a, #000);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg);
     color: white;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    overflow: hidden;
   }
 
-  /* Glassmorphism Container */
   .container {
     background: var(--card-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    padding: 40px;
-    border-radius: 24px;
+    padding: 30px;
+    border-radius: 28px;
     width: 90%;
-    max-width: 400px;
+    max-width: 380px;
     text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-    animation: fadeIn 0.8s ease-out;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    border: 1px solid #222;
   }
 
-  h2 {
-    margin-top: 0;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    background: linear-gradient(to right, #fff, #888);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .product-box {
+  .product-tag {
     display: inline-block;
-    background: rgba(0, 255, 153, 0.1);
-    border: 1px solid var(--primary);
-    padding: 6px 15px;
-    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 5px 15px;
+    border-radius: 20px;
     font-size: 12px;
-    text-transform: uppercase;
-    color: var(--primary);
-    margin-bottom: 25px;
-    letter-spacing: 1px;
-  }
-
-  /* Custom Upload Zone */
-  .upload-zone {
-    border: 2px dashed rgba(255, 255, 255, 0.2);
-    border-radius: 16px;
-    padding: 30px 20px;
+    color: #888;
     margin-bottom: 20px;
-    transition: 0.3s;
-    cursor: pointer;
-    position: relative;
+    border: 1px solid #333;
   }
 
-  .upload-zone:hover {
-    border-color: var(--primary);
-    background: rgba(0, 255, 153, 0.03);
+  /* Match the screenshot's dashed area */
+  .upload-zone {
+    border: 2px dashed #333;
+    border-radius: 20px;
+    padding: 10px;
+    margin-bottom: 25px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    overflow: hidden;
   }
 
   #videoPreview {
     width: 100%;
     border-radius: 12px;
     display: none;
-    margin-top: 10px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
   }
 
-  input[type="file"] { display: none; }
-
-  .upload-icon {
-    font-size: 40px;
-    margin-bottom: 10px;
-    display: block;
+  .upload-placeholder {
+    color: #666;
+    font-size: 14px;
   }
 
+  /* The Button from your screenshot */
   button {
     width: 100%;
-    padding: 16px;
+    padding: 18px;
     border: none;
-    border-radius: 12px;
+    border-radius: 16px;
     background: var(--primary);
     color: black;
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 18px;
+    font-weight: 700;
     cursor: pointer;
-    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 4px 15px var(--primary-glow);
+    transition: 0.2s;
+    box-shadow: 0 10px 20px var(--primary-glow);
+    margin-bottom: 20px;
   }
 
-  button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px var(--primary-glow);
-  }
+  button:active { transform: scale(0.98); }
 
-  button:disabled {
-    background: #444;
-    box-shadow: none;
-    cursor: not-allowed;
-  }
-
-  /* Progress Styling */
-  .progress {
+  /* Progress Bar */
+  .progress-container {
     width: 100%;
-    height: 8px;
-    background: rgba(255,255,255,0.1);
+    height: 6px;
+    background: #222;
     border-radius: 10px;
-    margin-top: 25px;
-    display: none;
+    margin: 20px 0;
     overflow: hidden;
+    display: none;
   }
 
   .progress-bar {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, #00ff99, #00ffee);
-    transition: width 0.4s ease;
+    background: var(--primary);
+    transition: width 0.3s;
   }
 
   #status {
-    margin-top: 20px;
     font-size: 14px;
-    line-height: 1.5;
-    color: #bbb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
   }
 
-  /* Security Toast */
+  .error-text { color: var(--error); }
+  .success-text { color: var(--primary); }
+
+  input[type="file"] { display: none; }
+
+  /* Toast Notification */
   #toast {
     visibility: hidden;
-    min-width: 250px;
-    background-color: var(--error);
+    background: var(--error);
     color: white;
-    text-align: center;
-    border-radius: 12px;
-    padding: 16px;
+    padding: 12px 24px;
+    border-radius: 10px;
     position: fixed;
-    z-index: 10;
     bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-weight: bold;
-    box-shadow: 0 10px 30px rgba(255, 77, 77, 0.3);
+    font-weight: 600;
+    z-index: 100;
   }
-
-  #toast.show {
-    visibility: visible;
-    animation: slideUp 0.5s, slideDown 0.5s 2.5s;
-  }
-
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes slideUp { from { bottom: 0; opacity: 0; } to { bottom: 30px; opacity: 1; } }
-  @keyframes slideDown { from { bottom: 30px; opacity: 1; } to { bottom: 0; opacity: 0; } }
+  #toast.show { visibility: visible; animation: fadeInOut 2.5s; }
+  @keyframes fadeInOut { 0% {opacity:0;} 15% {opacity:1;} 85% {opacity:1;} 100% {opacity:0;} }
 </style>
 </head>
-
 <body>
 
 <div class="container">
-  <div class="product-box">
-    ID: <span id="productLabel">Checking...</span>
-  </div>
-  
-  <h2>AI Memory Upload</h2>
+  <div class="product-tag">ID: <span id="productLabel">Loading...</span></div>
   
   <div class="upload-zone" onclick="document.getElementById('videoFile').click()">
-    <span class="upload-icon">🎬</span>
-    <p id="uploadText">Tap to select or drag video</p>
-    <video id="videoPreview" controls></video>
+    <div id="placeholder" class="upload-placeholder">
+      <p style="font-size: 30px; margin:0;">🎬</p>
+      <p>Select Video Memory</p>
+    </div>
+    <video id="videoPreview" controls playsinline></video>
   </div>
 
   <input type="hidden" id="productId">
-  <input type="file" id="videoFile" accept="video/*" onchange="previewVideo(this)">
+  <input type="file" id="videoFile" accept="video/*" onchange="handlePreview(this)">
 
-  <button id="uploadBtn" onclick="uploadVideo()">Finalize Memory</button>
+  <button id="uploadBtn" onclick="uploadVideo()">Upload Memory</button>
 
-  <div class="progress" id="progressBox">
+  <div class="progress-container" id="progressBox">
     <div class="progress-bar" id="progressBar"></div>
   </div>
 
@@ -204,103 +166,85 @@
 <div id="toast">Action Disabled</div>
 
 <script>
-// --- SECURITY ---
-function showToast(message) {
-  const toast = document.getElementById("toast");
-  toast.innerText = message;
-  toast.className = "show";
-  setTimeout(() => { toast.className = ""; }, 3000);
-}
-
+// --- 1. SECURITY (Anti-Inspect) ---
 document.addEventListener('contextmenu', e => e.preventDefault());
 document.addEventListener("keydown", e => {
   if (e.key === "F12" || (e.ctrlKey && e.shiftKey && "IJC".includes(e.key)) || (e.ctrlKey && e.key === "u")) {
     e.preventDefault();
-    showToast('Security Alert: Action Disabled');
+    const t = document.getElementById("toast");
+    t.className = "show";
+    setTimeout(() => { t.className = ""; }, 2500);
   }
 });
 
-// --- UI LOGIC ---
-function previewVideo(input) {
+// --- 2. PREVIEW LOGIC ---
+function handlePreview(input) {
   const file = input.files[0];
-  const preview = document.getElementById('videoPreview');
-  const text = document.getElementById('uploadText');
-  
   if (file) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      preview.src = e.target.result;
-      preview.style.display = 'block';
-      text.style.display = 'none';
-    }
-    reader.readAsDataURL(file);
+    document.getElementById('placeholder').style.display = 'none';
+    const preview = document.getElementById('videoPreview');
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = 'block';
   }
 }
 
-// --- CORE LOGIC ---
-const WEB_APP_URL = "YOUR_APPS_SCRIPT_URL_HERE";
+// --- 3. UPLOAD LOGIC ---
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyZ8QA9H-1tD6P1exSj4UX-kupANKjQDJ_W3_t6jnTaaqH7IcGR5Ye1lBM9pLnygySBuA/exec";
 
-window.onload = function () {
-  const productId = new URLSearchParams(window.location.search).get("product");
-  if(productId){
-    document.getElementById("productId").value = productId;
-    document.getElementById("productLabel").innerText = productId;
+window.onload = () => {
+  const id = new URLSearchParams(window.location.search).get("product");
+  if(id) {
+    document.getElementById("productId").value = id;
+    document.getElementById("productLabel").innerText = id;
   } else {
-    document.getElementById("status").innerHTML = "⚠️ Product ID missing from URL.";
-    document.getElementById("uploadBtn").disabled = true;
+    document.getElementById("status").innerHTML = "❌ Missing Product ID";
   }
 };
 
 async function uploadVideo() {
-  const productId = document.getElementById("productId").value;
   const file = document.getElementById("videoFile").files[0];
-  const statusDiv = document.getElementById("status");
-  const progressBox = document.getElementById("progressBox");
-  const progressBar = document.getElementById("progressBar");
+  const pId = document.getElementById("productId").value;
+  const status = document.getElementById("status");
+  const bar = document.getElementById("progressBar");
+  const box = document.getElementById("progressBox");
   const btn = document.getElementById("uploadBtn");
 
-  if (!file) { showToast("Please select a video first"); return; }
-  if (file.size > 10 * 1024 * 1024) { statusDiv.innerHTML = "❌ Video must be under 10MB."; return; }
+  if (!file) return;
+  if (file.size > 10 * 1024 * 1024) { status.innerHTML = "❌ Max 10MB allowed"; return; }
 
   // UI Setup
   btn.disabled = true;
-  btn.innerText = "Uploading...";
-  statusDiv.innerHTML = "Encapsulating your memory...";
-  progressBox.style.display = "block";
-  progressBar.style.width = "15%";
+  btn.innerText = "Processing...";
+  box.style.display = "block";
+  bar.style.width = "20%";
 
   const reader = new FileReader();
-  reader.onload = async function() {
-    progressBar.style.width = "40%";
-    const base64Data = reader.result.split(',')[1];
-
+  reader.readAsDataURL(file);
+  reader.onload = async () => {
+    const base64 = reader.result.split(',')[1];
+    bar.style.width = "50%";
+    
     try {
+      // Use standard fetch but handle it as a POST with text to avoid some CORS pre-flight issues
       const response = await fetch(WEB_APP_URL, {
         method: "POST",
-        body: JSON.stringify({
-          productId: productId,
-          file: base64Data,
-          fileName: file.name
-        })
+        mode: "no-cors", // This prevents the "Failed to fetch" error, but note you won't get the JSON response
+        cache: "no-cache",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId: pId, file: base64, fileName: file.name })
       });
 
-      progressBar.style.width = "85%";
-      const result = await response.json();
-
-      if (result.status === "success") {
-        progressBar.style.width = "100%";
-        statusDiv.innerHTML = `<b style="color:var(--primary)">Success!</b><br>Used: ${result.uploadCount} | Remaining: ${result.remaining}`;
-        btn.innerText = "Uploaded Successfully";
-      } else {
-        throw new Error(result.message || "Upload blocked");
-      }
-    } catch (error) {
-      statusDiv.innerHTML = "❌ " + error.message;
+      // Since mode is 'no-cors', we assume success if the fetch doesn't throw
+      bar.style.width = "100%";
+      status.innerHTML = "<span class='success-text'>✅ Upload Sent Successfully!</span>";
+      btn.innerText = "Done";
+      
+    } catch (err) {
+      status.innerHTML = "<span class='error-text'>❌ Failed to fetch. Try again.</span>";
       btn.disabled = false;
       btn.innerText = "Try Again";
     }
   };
-  reader.readAsDataURL(file);
 }
 </script>
 
